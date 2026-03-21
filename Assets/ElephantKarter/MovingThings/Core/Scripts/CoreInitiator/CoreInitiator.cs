@@ -1,3 +1,4 @@
+using CoreDomain.Scripts.Services.Logger.Base;
 using UnityEngine;
 namespace CoreDomain.Scripts.CoreInitiator
 {
@@ -9,7 +10,7 @@ namespace CoreDomain.Scripts.CoreInitiator
         }
         private void InitEntryPoint()
         {
-            Debug.Log("Core Initiator Initialized");
+            LogService.LogTopic("Core Initiator Initialized");
         }
     }
 }

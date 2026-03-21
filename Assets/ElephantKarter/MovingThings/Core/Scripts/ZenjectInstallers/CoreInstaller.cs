@@ -1,4 +1,4 @@
-using UnityEngine;
+using CoreDomain.Scripts.Services.Logger;
 using Zenject;
 namespace CoreDomain.Scripts.ZenjectInstallers
 {
@@ -6,6 +6,7 @@ namespace CoreDomain.Scripts.ZenjectInstallers
     {
         public override void InstallBindings()
         {
+            Container.BindInterfacesTo<UnityLogger>().AsSingle().NonLazy();
         }
     }
 }

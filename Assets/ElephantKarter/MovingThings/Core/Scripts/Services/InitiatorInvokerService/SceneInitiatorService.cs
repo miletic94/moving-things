@@ -20,7 +20,7 @@ namespace CoreDomain.Scripts.Services.InitiatorInovkerService
 
         public async Awaitable InvokeInitiatorLoadEntryPoint(SceneType sceneType, IInitiatorEnterData enterData, CancellationTokenSource cancellationTokenSource)
         {
-            // await _sceneInitiators[sceneType].LoadEntryPoint(enterData, cancellationTokenSource); COMMENTED
+            await _sceneInitiators[sceneType].LoadEntryPoint(enterData, cancellationTokenSource);
         }
         // COMMENTED
         // Awaitable InvokeInitiatorStartEntryPoint(SceneType sceneType, IInitiatorEnterData enterData, CancellationTokenSource cancellationTokenSource);

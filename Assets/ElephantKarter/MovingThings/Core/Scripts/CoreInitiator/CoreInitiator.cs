@@ -24,7 +24,6 @@ namespace CoreDomain.Scripts.CoreInitiator
         private async Awaitable LoadGameScene(CancellationTokenSource cancellationTokenSource)
         {
             await _sceneLoaderService.TryLoadScene(SceneType.GameScene, new GameInitiatorEnterData(), cancellationTokenSource);
-            LogService.LogTopic("GameScene Loaded", LogTopicType.Temp);
         }
     }
 }

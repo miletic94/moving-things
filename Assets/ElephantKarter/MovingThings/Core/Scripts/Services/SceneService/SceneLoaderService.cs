@@ -10,6 +10,10 @@ namespace CoreDomain.Scripts.Services.SceneService
     public class SceneLoaderService : ISceneLoaderService
     {
         private readonly ISceneInitiatorService _sceneInitiatorsService;
+        public SceneLoaderService(ISceneInitiatorService sceneInitiatorService)
+        {
+            _sceneInitiatorsService = sceneInitiatorService;
+        }
 
         private HashSet<string> _loadedScenes = new();
         private HashSet<string> _loadingScenes = new();
@@ -19,8 +23,7 @@ namespace CoreDomain.Scripts.Services.SceneService
             {
                 return false;
             }
-            // COMMENTED
-            // await _sceneInitiatorsService.InvokeInitiatorLoadEntryPoint(sceneType, enterData, cancelationTokenSource);
+            await _sceneInitiatorsService.InvokeInitiatorLoadEntryPoint(sceneType, enterData, cancelationTokenSource);
             return true;
         }
         public async Awaitable<bool> TryLoadScene(string sceneName, CancellationTokenSource cancellationTokenSource)

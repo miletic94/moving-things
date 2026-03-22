@@ -1,4 +1,5 @@
 public enum SceneType
 {
-    Gameplay
+    CoreScene,
+    GameScene
 }

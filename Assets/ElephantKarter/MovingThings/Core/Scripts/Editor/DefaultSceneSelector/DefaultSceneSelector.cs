@@ -41,7 +41,7 @@ namespace CoreDomain.Scripts.Editor.DefaultSceneSelector
         [MenuItem("Tools/ElephantKarter/Select Default Scene", false, 1)]
         private static void SelectDefaultScene()
         {
-            var absolutePath = EditorUtility.OpenFilePanel("Select default scene", GetSelectedFolder(), "*");
+            var absolutePath = EditorUtility.OpenFilePanel("Select default scene", GetSelectedFolder(), ".unity");
             if (absolutePath.IsNullOrEmpty())
             {
                 return;

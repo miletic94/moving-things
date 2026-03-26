@@ -20,7 +20,7 @@ namespace CoreDomain.Scripts.Helpers.SerializableDictionary
     }
 
     [Serializable]
-    public class SerializableDictionaryBase<TKey, TValue> : SerializableDictionaryBase, IDictionary<TKey, TValue>, IDictionary, ISerializationCallbackReceiver, IDeserializationCallback, ISerializable
+    public abstract class SerializableDictionaryBase<TKey, TValue, TValueStorage> : SerializableDictionaryBase, IDictionary<TKey, TValue>, IDictionary, ISerializationCallbackReceiver, IDeserializationCallback, ISerializable
     {
         public SerializableDictionaryBase()
         {
@@ -34,7 +34,7 @@ namespace CoreDomain.Scripts.Helpers.SerializableDictionary
         [SerializeField]
         TKey[] m_keys;
         [SerializeField]
-        TValue[] m_values;
+        TValueStorage[] m_values;
 
         #region ISerializationCallbackReceiver
         public void OnBeforeSerialize()
@@ -45,13 +45,13 @@ m_values: {m_values}
 m_keys: {m_keys}");
             var n = m_dict.Count;
             m_keys = new TKey[n];
-            m_values = new TValue[n];
+            m_values = new TValueStorage[n];
 
             var i = 0;
             foreach (var kvp in m_dict)
             {
                 m_keys[i] = kvp.Key;
-                m_values[i] = kvp.Value;
+                SetValue(m_values, i, kvp.Value);
                 i++;
             }
 
@@ -73,7 +73,7 @@ m_keys: {m_keys}");
                 int n = m_keys.Length;
                 for (int i = 0; i < n; i++)
                 {
-                    m_dict[m_keys[i]] = m_values[i];
+                    m_dict[m_keys[i]] = GetValue(m_values, i);
                 }
             }
             Debug.Log(@$"OnAfterDeserialize - ENDED
@@ -81,6 +81,10 @@ m_dict: {m_dict}
 m_values: {m_values}
 m_keys: {m_keys}");
         }
+
+        protected abstract void SetValue(TValueStorage[] storage, int i, TValue value);
+        protected abstract TValue GetValue(TValueStorage[] storage, int i);
+
         #endregion
 
         #region IDictionary<TKey, TValue> forwarding
@@ -215,14 +219,31 @@ m_keys: {m_keys}");
         #endregion
     }
 
-    public class Program
+    public static class SerializableDictionary
     {
-        public void Test()
+        [Serializable]
+        public class Storage<T> : SerializableDictionaryBase.Storage
         {
-            var t = new SerializableDictionaryBase<string, int>();
+            [SerializeReference]
+            public T data;
+        }
+    }
+    [Serializable]
+    public class SerializableDictionary<TKey, TValue, TValueStorage> : SerializableDictionaryBase<TKey, TValue, TValueStorage> where TValueStorage : SerializableDictionary.Storage<TValue>, new()
+    {
+        public SerializableDictionary() { }
+        public SerializableDictionary(IDictionary<TKey, TValue> dict) : base(dict) { }
+        protected SerializableDictionary(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-            t.Add("a", 1);
-            var tt = t["a"];
+        protected override void SetValue(TValueStorage[] storage, int i, TValue value)
+        {
+            storage[i] = new TValueStorage();
+            Debug.Log(storage[i]);
+            storage[i].data = value;
+        }
+        protected override TValue GetValue(TValueStorage[] storage, int i)
+        {
+            return storage[i].data;
         }
     }
 }

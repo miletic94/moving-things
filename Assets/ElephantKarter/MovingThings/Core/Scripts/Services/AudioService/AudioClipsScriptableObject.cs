@@ -5,6 +5,6 @@ namespace CoreDomain.Scripts.Services.AudioService
 {
     public abstract class AudioClipsScriptableObject : ScriptableObject
     {
-        public SerializableDictionary<AudioClipType, AudioClip> AudioClips;
+        // public SerializableDictionaryBase<AudioClipType, AudioClip> AudioClips;
     }
 }

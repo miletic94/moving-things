@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using CoreDomain.Scripts.Helpers.SerializableDictionary;
+using CoreDomain.Scripts.Utils.DebugUtils;
 using UnityEngine;
 
 namespace CoreDomain.Scripts.Helpers.SerializableDictionary
@@ -20,14 +20,68 @@ namespace CoreDomain.Scripts.Helpers.SerializableDictionary
     }
 
     [Serializable]
-    public class SerializableDictionary<TKey, TValue> : SerializableDictionaryBase, IDictionary<TKey, TValue>, IDictionary
+    public class SerializableDictionaryBase<TKey, TValue> : SerializableDictionaryBase, IDictionary<TKey, TValue>, IDictionary, ISerializationCallbackReceiver, IDeserializationCallback, ISerializable
     {
-
+        public SerializableDictionaryBase()
+        {
+            m_dict = new Dictionary<TKey, TValue>();
+        }
+        public SerializableDictionaryBase(IDictionary<TKey, TValue> dict)
+        {
+            m_dict = new Dictionary<TKey, TValue>(dict);
+        }
         Dictionary<TKey, TValue> m_dict;
         [SerializeField]
         TKey[] m_keys;
         [SerializeField]
         TValue[] m_values;
+
+        #region ISerializationCallbackReceiver
+        public void OnBeforeSerialize()
+        {
+            Debug.Log(@$"OnBeforeSerialize - STARTED
+m_dict: {m_dict}
+m_values: {m_values}
+m_keys: {m_keys}");
+            var n = m_dict.Count;
+            m_keys = new TKey[n];
+            m_values = new TValue[n];
+
+            var i = 0;
+            foreach (var kvp in m_dict)
+            {
+                m_keys[i] = kvp.Key;
+                m_values[i] = kvp.Value;
+                i++;
+            }
+
+            Debug.Log(@$"OnBeforeSerialize - ENDED
+m_dict: {DebugUtils.DictionaryToString(m_dict)}
+m_keys: {DebugUtils.CollectionToString(m_keys)}
+m_values: {DebugUtils.CollectionToString(m_values)}
+            ");
+        }
+        public void OnAfterDeserialize()
+        {
+            Debug.Log(@$"OnAfterDeserialize - STARTED
+m_dict: {m_dict}
+m_values: {m_values}
+m_keys: {m_keys}");
+            if (m_keys != null && m_values != null && m_keys.Length == m_values.Length)
+            {
+                m_dict.Clear();
+                int n = m_keys.Length;
+                for (int i = 0; i < n; i++)
+                {
+                    m_dict[m_keys[i]] = m_values[i];
+                }
+            }
+            Debug.Log(@$"OnAfterDeserialize - ENDED
+m_dict: {m_dict}
+m_values: {m_values}
+m_keys: {m_keys}");
+        }
+        #endregion
 
         #region IDictionary<TKey, TValue> forwarding
 
@@ -117,12 +171,10 @@ namespace CoreDomain.Scripts.Helpers.SerializableDictionary
         {
             ((IDictionary)m_dict).Add(key, value);
         }
-
         public bool Contains(object key)
         {
             return ((IDictionary)m_dict).Contains(key);
         }
-
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             return ((IDictionary)m_dict).GetEnumerator();
@@ -139,15 +191,38 @@ namespace CoreDomain.Scripts.Helpers.SerializableDictionary
         }
 
         #endregion
+
+        #region ISerializable
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            ((ISerializable)m_dict).GetObjectData(info, context);
+        }
+        protected SerializableDictionaryBase(SerializationInfo info, StreamingContext context)
+        {
+            m_dict = new Dictionary<TKey, TValue>(info, context);
+        }
+
+        #endregion
+
+        #region IDeserializationCallback
+
+        public void OnDeserialization(object sender)
+        {
+            ((IDeserializationCallback)m_dict).OnDeserialization(sender);
+        }
+
+        #endregion
     }
-}
 
-public class Program
-{
-    public void Test()
+    public class Program
     {
-        var t = new SerializableDictionary<string, int>();
+        public void Test()
+        {
+            var t = new SerializableDictionaryBase<string, int>();
 
-        t.Add("a", 1);
+            t.Add("a", 1);
+            var tt = t["a"];
+        }
     }
 }

@@ -25,7 +25,7 @@ public class SerializationExperiments : MonoBehaviour
         {
             _data = data;
         }
-        int _data;
+        public int _data;
         public int GetData()
         {
             return _data;

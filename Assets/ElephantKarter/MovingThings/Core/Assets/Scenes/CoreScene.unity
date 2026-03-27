@@ -548,6 +548,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1574462629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1574462631}
+  - component: {fileID: 1574462630}
+  m_Layer: 0
+  m_Name: PropertyDrawerExperiments
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1574462630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574462629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c06c1a5401903ff4d9ab34a1b05afad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  potionResult:
+    name: 
+    amount: 1
+    unit: 0
+  potionIngredients: []
+  testObject: {fileID: 0}
+--- !u!4 &1574462631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1574462629}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1863139068
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,7 +628,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dict:
-    m_keys: []
+    m_keys:
+    - 1
+    m_values:
+    - data:
+        rid: 6473390723780837376
+  references:
+    version: 2
+    RefIds:
+    - rid: 6473390723780837376
+      type: {class: SerializationExperiments/IntData, ns: , asm: Assembly-CSharp}
+      data:
+        _data: 2
 --- !u!4 &1863139070
 Transform:
   m_ObjectHideFlags: 0
@@ -604,3 +665,4 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1863139070}
+  - {fileID: 1574462631}
